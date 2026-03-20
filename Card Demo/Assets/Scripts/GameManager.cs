@@ -93,7 +93,6 @@ public class GameManager : MonoBehaviour
         // Check if there's pending save data from MenuManager (continues a game)
         if (pendingSaveData != null)
         {
-            Debug.Log("[GameManager.Start] Found pending save data from previous scene, loading game...");
             cachedSaveData = pendingSaveData;
             currentDifficulty = pendingSaveData.difficulty;
             pendingSaveData = null; // Clear the static reference
@@ -101,7 +100,6 @@ public class GameManager : MonoBehaviour
         // Check if there's pending difficulty selection from main menu (new game with selected difficulty)
         else if (hasPendingDifficulty)
         {
-            Debug.Log($"[GameManager.Start] Found pending difficulty selection: {pendingDifficulty}");
             currentDifficulty = pendingDifficulty;
             hasPendingDifficulty = false; // Clear the flag
             pendingDifficulty = 0; // Reset to default
@@ -117,7 +115,6 @@ public class GameManager : MonoBehaviour
     {
         if (gameConfig == null)
         {
-            Debug.LogError("GameConfiguration not assigned!");
             return;
         }
 
@@ -131,7 +128,6 @@ public class GameManager : MonoBehaviour
             // If we have cached save data, pass it to GameSessionManager BEFORE initialization
             if (cachedSaveData != null)
             {
-                Debug.Log("[GameManager.InitializeGame] Passing cached save data to GameSessionManager for stats restoration");
                 gameSessionManager.SetCachedSaveData(cachedSaveData);
             }
             
@@ -157,7 +153,6 @@ public class GameManager : MonoBehaviour
             if (SaveLoadManager.Instance != null)
             {
                 SaveLoadManager.Instance.DeleteSavedGame();
-                Debug.Log("[GameManager.InitializeGame] ✓ Save file deleted after game restoration - single-use save!");
             }
         }
 
@@ -168,7 +163,6 @@ public class GameManager : MonoBehaviour
         {
             // Stop any previous BGM to ensure clean slate
             audioMgr.StopBGM();
-            Debug.Log("[GameManager.InitializeGame] Previous BGM stopped, starting gameplay BGM...");
             
             // Use a small delay to ensure BGM transition is clean
             StartCoroutine(PlayGameplayBGMWithDelay());
@@ -179,7 +173,6 @@ public class GameManager : MonoBehaviour
         }
 
         OnGameInitialized?.Invoke();
-        Debug.Log("[GameManager.InitializeGame] Game initialized successfully");
     }
     
     private System.Collections.IEnumerator PlayGameplayBGMWithDelay()
@@ -189,9 +182,7 @@ public class GameManager : MonoBehaviour
         AudioManager audioMgr = AudioManager.Instance;
         if (audioMgr != null)
         {
-            Debug.Log("[GameManager.PlayGameplayBGMWithDelay] Calling PlayGameplayBGM");
             audioMgr.PlayGameplayBGM();
-            Debug.Log("[GameManager.PlayGameplayBGMWithDelay] Gameplay BGM started via singleton");
         }
         else
         {
@@ -204,12 +195,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void PrePoolCards(int count)
     {
-        Debug.Log($"PrePoolCards: Creating {count} cards. Current pool size: {cardPool.Count}");
         for (int i = 0; i < count; i++)
         {
             CreatePooledCard();
         }
-        Debug.Log($"PrePoolCards: Done. Final pool size: {cardPool.Count}");
     }
 
     private CardController CreatePooledCard()
@@ -220,11 +209,9 @@ public class GameManager : MonoBehaviour
         {
             cardGO.SetActive(false);
             cardPool.Enqueue(controller);
-            Debug.Log($"Card pooled. Pool count: {cardPool.Count}");
         }
         else
         {
-            Debug.LogError($"CardController component not found on instantiated prefab!");
             Destroy(cardGO);
         }
         return controller;
@@ -292,7 +279,6 @@ public class GameManager : MonoBehaviour
 
         // Pre-pool exactly the cards we need
         PrePoolCards(totalCards);
-        Debug.Log($"Before board creation: cardPool.Count = {cardPool.Count}, allCards.Count = {allCards.Count}");
 
         // Create card data list - either from saved game or new shuffled
         List<CardDefinition> cardDataList = new List<CardDefinition>();
@@ -301,10 +287,7 @@ public class GameManager : MonoBehaviour
         bool isLoadingFromSave = cachedSaveData != null && cachedSaveData.cards != null && cachedSaveData.cards.Count == totalCards;
         
         if (isLoadingFromSave)
-        {
-            // Use saved card order - NO shuffle, restore exact board layout
-            Debug.Log("[GameManager.CreateGameBoard] Loading saved game - using exact board layout from save");
-            
+        {   
             foreach (CardState savedCard in cachedSaveData.cards)
             {
                 // Find the CardDefinition with this matchValue
@@ -425,8 +408,6 @@ public class GameManager : MonoBehaviour
 
             allCards.Add(card);
         }
-
-        Debug.Log($"Game board created: {gridRows}x{gridCols} ({totalCards} cards, {pairCount} pairs). Cards instantiated: {allCards.Count}");
     }
 
     /// <summary>
@@ -541,9 +522,7 @@ public class GameManager : MonoBehaviour
     /// Restarts the game with the same difficulty.
     /// </summary>
     public void RestartGame()
-    {
-        Debug.Log("[GameManager.RestartGame] Restarting game - clearing cached data and creating fresh board");
-        
+    {   
         // Clear any cached save data to ensure fresh new game (not loading from save)
         cachedSaveData = null;
         pendingSaveData = null;
@@ -617,8 +596,6 @@ public class GameManager : MonoBehaviour
             });
         }
 
-        Debug.Log($"[GameManager.SaveGame] Collected {cardStatesList.Count} card states");
-
         GameState data = new GameState
         {
             score = gameSessionManager.GetScore(),
@@ -631,18 +608,8 @@ public class GameManager : MonoBehaviour
             saveTimestamp = System.DateTime.Now.ToString(),
             cards = cardStatesList
         };
-
-        Debug.Log($"[GameManager.SaveGame] SAVING COMPLETE GAME STATE:");
-        Debug.Log($"  Score: {data.score}");
-        Debug.Log($"  Matched Pairs: {data.matchedPairs}/{gameConfig.GetTotalCards(data.difficulty) / 2}");
-        Debug.Log($"  Combo: {data.combo}");
-        Debug.Log($"  Attempts: {data.totalAttempts}");
-        Debug.Log($"  Time Remaining: {data.timeRemaining:F1}s");
-        Debug.Log($"  Difficulty: {data.difficulty}");
-        Debug.Log($"  Cards Saved: {cardStatesList.Count}");
         
         SaveLoadManager.Instance.SaveGame(data);
-        Debug.Log("[GameManager.SaveGame] ✓ Complete game state saved to disk!");
     }
 
     /// <summary>
@@ -664,20 +631,9 @@ public class GameManager : MonoBehaviour
         GameState data = SaveLoadManager.Instance.LoadGame();
         if (data != null)
         {
-            Debug.Log("[GameManager.LoadGame] LOADING SAVED GAME STATE:");
-            Debug.Log($"  Score: {data.score}");
-            Debug.Log($"  Matched Pairs: {data.matchedPairs}/{data.cards.Count / 2}");
-            Debug.Log($"  Combo: {data.combo}");
-            Debug.Log($"  Attempts: {data.totalAttempts}");
-            Debug.Log($"  Time Remaining: {data.timeRemaining:F1}s");
-            Debug.Log($"  Difficulty: {data.difficulty}");
-            Debug.Log($"  Timestamp: {data.saveTimestamp}");
-            
             // For now, start with the same difficulty
             // TODO: Full implementation would restore all card states and game variables
             ChangeDifficultyAndRestart(data.difficulty);
-            
-            Debug.Log("[GameManager.LoadGame] Game loaded and restarted with saved difficulty!");
         }
         else
         {
@@ -704,8 +660,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[GameManager.RestoreCardStates] Restoring {allCards.Count} card states from saved data...");
-
         // Apply saved card states in order (position by position)
         for (int i = 0; i < allCards.Count; i++)
         {
@@ -718,24 +672,19 @@ public class GameManager : MonoBehaviour
             {
                 // Card should be face up but isn't - flip it
                 card.Flip();
-                Debug.Log($"[GameManager.RestoreCardStates] Card {i} flipped to face-up");
             }
             else if (!savedState.isFaceUp && cardCurrentlyFaceUp)
             {
                 // Card should be face down but is up - flip it back
                 card.Flip();
-                Debug.Log($"[GameManager.RestoreCardStates] Card {i} flipped to face-down");
             }
 
             // If card was matched in saved state, lock it
             if (savedState.isMatched)
             {
                 card.LockCard();
-                Debug.Log($"[GameManager.RestoreCardStates] Card {i} restored as MATCHED and locked");
             }
         }
-
-        Debug.Log("[GameManager.RestoreCardStates] ✓ All card states restored successfully!");
     }
 
     /// <summary>
@@ -778,7 +727,6 @@ public class GameManager : MonoBehaviour
         if (saveData != null)
         {
             pendingSaveData = saveData;
-            Debug.Log("[GameManager.PrepareSaveDataForLoading] Save data cached and ready to load on scene transition");
         }
         else
         {
@@ -794,7 +742,6 @@ public class GameManager : MonoBehaviour
     {
         pendingDifficulty = difficulty;
         hasPendingDifficulty = true;
-        Debug.Log($"[GameManager.SetDifficultyForNewGame] Difficulty {difficulty} set and ready to load on scene transition");
     }
 
     public static GameManager Instance => instance;

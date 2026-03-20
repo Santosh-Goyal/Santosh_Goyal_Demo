@@ -113,13 +113,10 @@ public class UIManager : MonoBehaviour
     /// Called when main menu starts to ensure full volume.
     /// </summary>
     public void ResetAllVolumeSlidersToMax()
-    {
-        Debug.Log("[UIManager.ResetAllVolumeSlidersToMax] Resetting all volume sliders to 1.0");
-        
+    {        
         if (masterVolumeSlider != null)
         {
             masterVolumeSlider.value = 1f;
-            Debug.Log("[UIManager.ResetAllVolumeSlidersToMax] Master Volume set to 1.0");
         }
         else
         {
@@ -129,7 +126,6 @@ public class UIManager : MonoBehaviour
         if (sfxVolumeSlider != null)
         {
             sfxVolumeSlider.value = 1f;
-            Debug.Log("[UIManager.ResetAllVolumeSlidersToMax] SFX Volume set to 1.0");
         }
         else
         {
@@ -139,7 +135,6 @@ public class UIManager : MonoBehaviour
         if (bgmVolumeSlider != null)
         {
             bgmVolumeSlider.value = 1f;
-            Debug.Log("[UIManager.ResetAllVolumeSlidersToMax] BGM Volume set to 1.0");
         }
         else
         {
@@ -162,7 +157,6 @@ public class UIManager : MonoBehaviour
             
             // Force update UI with current values in case events already fired before subscription
             // This is critical when loading a saved game, as stats are restored before UIManager subscribes
-            Debug.Log("[UIManager.SubscribeToEvents] Syncing UI with current game state");
             UpdateScoreDisplay(gameSessionManager.Score);
             UpdateComboDisplay(gameSessionManager.Combo);
             UpdateTimerDisplay(gameSessionManager.TimeRemaining);
@@ -190,7 +184,6 @@ public class UIManager : MonoBehaviour
         if (audioMgr != null)
         {
             audioMgr.PlayMenuBGM();
-            Debug.Log("[UIManager.ShowMainMenu] Menu BGM playing via singleton");
         }
         else
         {
@@ -214,8 +207,6 @@ public class UIManager : MonoBehaviour
         {
             matchesText.text = "Matches: 0/0";
         }
-
-        Debug.Log("Game initialized - all panels reset");
     }
 
     /// <summary>
@@ -325,9 +316,7 @@ public class UIManager : MonoBehaviour
         // ONLY SAVE if called from pause menu, NOT from game over panel
         if (shouldSaveGame && gameManager != null)
         {
-            Debug.Log("[UIManager.ReturnToMainMenu] Saving current game state before returning to menu...");
             gameManager.SaveGame(true);
-            Debug.Log("[UIManager.ReturnToMainMenu] ✓ Game state saved successfully!");
         }
         else if (!shouldSaveGame)
         {
@@ -340,7 +329,6 @@ public class UIManager : MonoBehaviour
         {
             // Aggressively stop all BGM to ensure clean transition
             audioMgr.StopBGM();
-            Debug.Log("[UIManager.ReturnToMainMenu] Gameplay BGM stopped before returning to menu");
         }
         else
         {

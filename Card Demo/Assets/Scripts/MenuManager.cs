@@ -89,7 +89,6 @@ public class MenuManager : MonoBehaviour
         if (uiManager != null)
         {
             uiManager.ResetAllVolumeSlidersToMax();
-            Debug.Log("[InitializeMenu] Volume sliders reset to maximum");
         }
 
         // Use AudioManager singleton directly for reliability
@@ -100,7 +99,6 @@ public class MenuManager : MonoBehaviour
             // Ensure any previous BGM is completely stopped before playing menu BGM
             // This prevents gameplay BGM from continuing to play
             audioMgr.StopBGM();
-            Debug.Log("[InitializeMenu] AudioManager singleton found, stopped previous BGM. Starting delayed menu BGM...");
             
             // Brief delay to ensure complete stop before starting menu BGM
             StartCoroutine(StartMenuBGMWithDelay());
@@ -115,16 +113,12 @@ public class MenuManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         
-        Debug.Log("[StartMenuBGMWithDelay] Coroutine executing...");
-        
         // Get AudioManager singleton directly
         AudioManager audioMgr = AudioManager.Instance;
         
         if (audioMgr != null)
         {
-            Debug.Log("[StartMenuBGMWithDelay] AudioManager singleton found, calling PlayMenuBGM");
             audioMgr.PlayMenuBGM();
-            Debug.Log("[StartMenuBGMWithDelay] Menu BGM call completed");
         }
         else
         {
@@ -174,9 +168,6 @@ public class MenuManager : MonoBehaviour
         if (quitButton != null)
             quitButton.onClick.AddListener(OnQuitClicked);
         
-        // Subscribe to difficulty buttons (MAIN MENU ONLY - not gameplay scene)
-        Debug.Log("[MenuManager.SubscribeToButtons] Setting up main menu difficulty buttons...");
-        
         int connectedButtons = 0;
         for (int i = 0; i < difficultyButtons.Length; i++)
         {
@@ -185,7 +176,6 @@ public class MenuManager : MonoBehaviour
             {
                 difficultyButtons[i].onClick.AddListener(() => OnDifficultySelected(difficultyIndex));
                 connectedButtons++;
-                Debug.Log($"[MenuManager.SubscribeToButtons] Connected difficulty button {i}");
             }
             else
             {
@@ -204,8 +194,6 @@ public class MenuManager : MonoBehaviour
         
         // Set initial difficulty button visual state (Easy selected by default)
         UpdateDifficultyButtonVisuals();
-        
-        Debug.Log("[MenuManager.SubscribeToButtons] All buttons subscribed, difficulty set to Easy (0)");
     }
     
     /// <summary>
@@ -258,9 +246,6 @@ public class MenuManager : MonoBehaviour
         AudioManager audioMgr = AudioManager.Instance;
         if (audioMgr != null)
             audioMgr.PlayButtonClickSound();
-
-        // Start new game with selected difficulty
-        Debug.Log($"[MenuManager.OnNewGameClicked] Starting new game with selected difficulty: {selectedDifficulty}");
         
         GameManager.SetDifficultyForNewGame(selectedDifficulty);
         SceneManager.LoadScene(1);
@@ -280,7 +265,6 @@ public class MenuManager : MonoBehaviour
         
         string[] difficultyNames = { "Easy", "Medium", "Hard", "Expert" };
         string diffName = (difficulty >= 0 && difficulty < difficultyNames.Length) ? difficultyNames[difficulty] : "Unknown";
-        Debug.Log($"[MenuManager.OnDifficultySelected] Difficulty selected: {diffName} (Index: {difficulty})");
     }
 
     /// <summary>
@@ -297,13 +281,8 @@ public class MenuManager : MonoBehaviour
             GameState data = SaveLoadManager.Instance.LoadGame();
             if (data != null)
             {
-                Debug.Log("[MenuManager.OnContinueGameClicked] Continuing previous game...");
-                Debug.Log($"[MenuManager.OnContinueGameClicked] Loaded Score: {data.score}, Pairs: {data.matchedPairs}, Difficulty: {data.difficulty}");
-                Debug.Log($"[MenuManager.OnContinueGameClicked] Card States: {(data.cards != null ? data.cards.Count : 0)} cards");
-                
                 // Cache the save data BEFORE loading the scene
                 GameManager.PrepareSaveDataForLoading(data);
-                Debug.Log("[MenuManager.OnContinueGameClicked] Save data prepared, loading gameplay scene...");
                 
                 // Load the gameplay scene - GameManager will detect cached data in Start()
                 // and will restore all game state (score, pairs, card states, etc.)

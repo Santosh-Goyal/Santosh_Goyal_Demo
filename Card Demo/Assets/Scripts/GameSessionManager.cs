@@ -91,9 +91,6 @@ public class GameSessionManager : MonoBehaviour
             difficulty = cachedSaveData.difficulty;
             int totalPairs = gameConfig.GetTotalCards(difficulty) / 2;
             
-            Debug.Log("[GameSessionManager.InitializeGameSession] Restoring from cached save data");
-            Debug.Log($"[GameSessionManager.InitializeGameSession] Difficulty: {difficulty}, Restoring - Score: {cachedSaveData.score}, Pairs: {cachedSaveData.matchedPairs}/{totalPairs}, Attempts: {cachedSaveData.totalAttempts}, Combo: {cachedSaveData.combo}, Time: {cachedSaveData.timeRemaining:F1}s");
-            
             score = cachedSaveData.score;
             matchedPairs = cachedSaveData.matchedPairs;
             totalAttempts = cachedSaveData.totalAttempts;
@@ -148,7 +145,6 @@ public class GameSessionManager : MonoBehaviour
         if (saveData != null)
         {
             cachedSaveData = saveData;
-            Debug.Log("[GameSessionManager.SetCachedSaveData] Cached save data for restoration on InitializeGameSession");
         }
         else
         {
@@ -191,11 +187,9 @@ public class GameSessionManager : MonoBehaviour
         AudioManager audioMgr = AudioManager.Instance;
         if (audioMgr != null)
         {
-            Debug.Log("[GameSessionManager.RecordMatch] Playing match sound");
             audioMgr.PlayMatchSound();
             if (combo > 1 && combo % 3 == 0)
             {
-                Debug.Log("[GameSessionManager.RecordMatch] Playing combo sound (combo: " + combo + ")");
                 audioMgr.PlayComboSound();
             }
         }
@@ -238,7 +232,6 @@ public class GameSessionManager : MonoBehaviour
         AudioManager audioMgr = AudioManager.Instance;
         if (audioMgr != null)
         {
-            Debug.Log("[GameSessionManager.RecordMismatch] Playing mismatch sound");
             audioMgr.PlayMismatchSound();
         }
         else
@@ -264,12 +257,10 @@ public class GameSessionManager : MonoBehaviour
         {
             if (isWin)
             {
-                Debug.Log("[GameSessionManager.EndGame] Playing win sound");
                 audioMgr.PlayWinSound();
             }
             else
             {
-                Debug.Log("[GameSessionManager.EndGame] Playing gameOver sound");
                 audioMgr.PlayGameOverSound();
             }
         }
