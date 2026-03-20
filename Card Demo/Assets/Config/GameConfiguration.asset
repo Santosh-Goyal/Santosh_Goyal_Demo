@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c81c1abd50769949a193de4ca61d336, type: 3}
+  m_Name: GameConfiguration
+  m_EditorClassIdentifier: Assembly-CSharp::GameConfiguration
+  gridRows: 2
+  gridColumns: 3
+  cardSpacingX: 10
+  cardSpacingY: 10
+  cardFlipDuration: 0.25
+  mismatchResetDelay: 1.5
+  flipEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  timeLimit: 300
+  enableTimeLimit: 1
+  pointsPerMatch: 100
+  pointsPerMismatch: -10
+  comboMultiplier: 1
+  maxCombo: 10
+  cardDefinitions:
+  - cardID: 0
+    cardName: A
+    cardFront: {fileID: 3573036208370857778, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 0
+    description: 
+  - cardID: 1
+    cardName: B
+    cardFront: {fileID: -428857338, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 1
+    description: 
+  - cardID: 2
+    cardName: C
+    cardFront: {fileID: 1546819070, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 2
+    description: 
+  - cardID: 3
+    cardName: D
+    cardFront: {fileID: -558064044, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 3
+    description: 
+  - cardID: 4
+    cardName: E
+    cardFront: {fileID: -27319817, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 4
+    description: 
+  - cardID: 5
+    cardName: F
+    cardFront: {fileID: 939903952, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 5
+    description: 
+  - cardID: 6
+    cardName: G
+    cardFront: {fileID: -1753349021, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 6
+    description: 
+  - cardID: 7
+    cardName: H
+    cardFront: {fileID: 1207361144, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 7
+    description: 
+  - cardID: 8
+    cardName: I
+    cardFront: {fileID: -1547159664, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 8
+    description: 
+  - cardID: 9
+    cardName: J
+    cardFront: {fileID: -1725646682, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 9
+    description: 
+  - cardID: 10
+    cardName: K
+    cardFront: {fileID: 1555700177, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 10
+    description: 
+  - cardID: 11
+    cardName: L
+    cardFront: {fileID: 1863522541, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 11
+    description: 
+  - cardID: 12
+    cardName: M
+    cardFront: {fileID: -891715244, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 12
+    description: 
+  - cardID: 13
+    cardName: N
+    cardFront: {fileID: -2040477505, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 13
+    description: 
+  - cardID: 14
+    cardName: O
+    cardFront: {fileID: -2048864845, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 14
+    description: 
+  - cardID: 15
+    cardName: P
+    cardFront: {fileID: -1517558222, guid: e571d8d06e2e715428c3e492cfbcd3c4, type: 3}
+    matchValue: 15
+    description: 
+  cardBackSprite: {fileID: 21300000, guid: 9c3efa43236f4e349b14097a0e507e15, type: 3}
+  difficultyLevels:
+  - levelName: Easy
+    gridRows: 2
+    gridColumns: 3
+    timeLimitSeconds: 60
+    cardFlipDurationModifier: 0.25
+  - levelName: Medium
+    gridRows: 4
+    gridColumns: 3
+    timeLimitSeconds: 120
+    cardFlipDurationModifier: 0.25
+  - levelName: Hard
+    gridRows: 4
+    gridColumns: 4
+    timeLimitSeconds: 180
+    cardFlipDurationModifier: 0.25
+  - levelName: Expert
+    gridRows: 5
+    gridColumns: 4
+    timeLimitSeconds: 240
+    cardFlipDurationModifier: 0.25
